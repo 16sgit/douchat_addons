@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/weuix.min.css">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/List.css" />
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/bottom_common.css" />
+		<script src="{$_G['addon_url']}/Public/js/zepto.min.js"></script>
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+		<!--表单-->
+		<volist name="data" id="val">
+			<switch name="val['status']">
+				<case value="1">
+					<div class="weui-form-preview weui-form-preview-interval">
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label ">付款金额</label>
+					<em class="weui-form-preview-value weui-form-preview-value_1 f-red">待报价</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">内容</label>
+						<span class="weui-form-preview-value">{$val['content']}</span>
+					</p>
+					<p class="report ">等待报价！</p>
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary f-gray" href="javascript:" >查看</a>
+				</div>
+			</div>
+				</case>
+				<case value="2">
+					<div class="weui-form-preview weui-form-preview-interval">
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label ">付款金额</label>
+					<em class="weui-form-preview-value weui-form-preview-value_1 f-red">{$val['reply_price']}</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">内容</label>
+						<span class="weui-form-preview-value">{$val['content']}</span>
+					</p>
+					<p class="report ">恭喜你，报价成功</p>
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary " href="{:create_mobile_url('detail',array('id'=>$val['id']))}" >查看</a>
+				</div>
+			</div>
+				</case>
+				<case value="3">
+					<div class="weui-form-preview weui-form-preview-interval">
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label ">付款金额</label>
+					<em class="weui-form-preview-value weui-form-preview-value_1 f-red">订单有误哦</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">内容</label>
+						<span class="weui-form-preview-value">{$val['content']}</span>
+					</p>
+					<p class="report ">请点击进入修改订单</p>
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary " href="{:create_mobile_url('uploadOrder',array('id'=>$val['id']))}" >修改</a>
+				</div>
+			</div>
+				</case>
+				<case value="4">
+					<div class="weui-form-preview weui-form-preview-interval">
+				<div class="weui-form-preview-hd">
+					<label class="weui-form-preview-label ">付款金额</label>
+					<em class="weui-form-preview-value weui-form-preview-value_1 f-red">报价中</em>
+				</div>
+				<div class="weui-form-preview-bd">
+					<p>
+						<label class="weui-form-preview-label">内容</label>
+						<span class="weui-form-preview-value">{$val['content']}</span>
+					</p>
+					<p class="report ">正在报价，请稍等</p>
+				</div>
+				<div class="weui-form-preview-ft">
+					<a class="weui-form-preview-btn weui-form-preview-btn-primary f-gray"  >查看</a>
+				</div>
+			</div>
+				</case>
+			</switch>
+		</volist>
+		<!--底部导航栏-->
+		<div class="bottom_interval"></div>
+	</body>
+
+</html>

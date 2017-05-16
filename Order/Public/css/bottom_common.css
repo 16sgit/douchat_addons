@@ -1,0 +1,7 @@
+	.bottom_interval{
+			height: 55.2px;
+		}
+.weui_tabbar {
+	position: fixed;
+	bottom: 0;
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/weuix.min.css">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/index.css" />
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/bottom_common.css" />
+		<script src="{$_G['addon_url']}/Public/js/zepto.min.js"></script>
+		{:hook('jssdk', true)}
+		<script>
+		    var img1localIds = '';
+		    var img2localIds = '';
+			function successFun(data){
+				if(data.status == 1){
+					$.toast(data.info);
+					$('#ajaxReqire').val('yes');      //防止重复提交
+				}else{
+					$.toast(data.info, "forbidden");
+				}
+			}
+			function errFun($data){
+					$.toast('Error',"forbidden");
+			}
+			$(function(){
+				$('.upload').click(function(){
+					var imgs = $(this).attr('id');
+					wx.ready(function(){
+						wx.chooseImage({
+						    count: 1, // 默认9
+						    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+						    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+						    success: function (res) {
+						              localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+						              if(imgs == 'img1'){
+						              	 img1localIds = localIds;
+						              	 $('#'+imgs).html('<li class="weui_uploader_file" style="background-image:url('+localIds+')"></li>'); 
+						              }else{
+						              	if(!img1localIds){
+						              		img1localIds = localIds;
+						              		$('#img1').html('<li class="weui_uploader_file" style="background-image:url('+localIds+')"></li>'); 
+						              	}else{
+						              		img2localIds  = localIds;
+						              		$('#'+imgs).html('<li class="weui_uploader_file" style="background-image:url('+localIds+')"></li>')
+						              	}
+						              }
+						    }
+						});
+					});
+				});
+
+				$('.ajax-post').click(function(){
+					if($('#ajaxReqire').val()){
+						$.toptips("该表单已提交");
+							return false;
+					}
+					var url = '{:create_mobile_url('index')}';
+					var serId1  = '';
+					var serId2  = '';
+					var content = $('#textarea').val();
+					var truename = $('#truename').val();
+					var qqnumber = $('#qqnumber').val();
+						if(!content){
+							$.toptips("内容不能为空");
+							return false;
+						}
+						if(!truename){
+							$.toptips("姓名不能为空");
+							return false;
+						}
+						if(!qqnumber){
+							$.toptips("QQ号码不能为空");
+							return false;
+						}
+						if(!img1localIds && !img2localIds){
+							$.toptips("至少上传一张图片");
+							return false;
+						}
+
+						if(img1localIds){
+							wx.uploadImage({
+							    localId: img1localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+							    isShowProgressTips: 1, // 默认为1，显示进度提示
+							    success: function (res) {
+							        var serverId = res.serverId; // 返回图片的服务器端ID
+							            serId1   = serverId;
+							            if(img2localIds){
+							            	wx.uploadImage({
+											    localId: img2localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+											    isShowProgressTips: 1, // 默认为1，显示进度提示
+											    success: function (res) {
+											        var serverId = res.serverId; // 返回图片的服务器端ID
+											            serId2   = serverId;
+											            //执行ajax
+											            ajax(url,{'content':content,'truename':truename,'qqnumber':qqnumber,'serId1':serId1,'serId2':serId2},successFun,errFun);
+				 							    }
+											});
+							            }else{
+							            	//执行ajax
+							            ajax(url,{'content':content,'truename':truename,'qqnumber':qqnumber,'serId1':serId1},successFun,errFun);
+							            }
+							            
+ 							    }
+							});
+						}
+				})
+			});
+		</script>
+	</head>
+
+	<body>
+	<div class="slide" id="slide2">
+      <ul>
+      <volist name="Xuan" id="val">
+        <li>
+          <a href="#">
+            <img src="{$val}" alt="">
+          </a>
+        </li>
+      </volist>
+      </ul>
+      <div class="dot">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+		<form action="" method="post">
+		<!--文本输入框-->
+		<input class="weui_input"  id="ajaxReqire" type="hidden">
+		<div class="weui_cells weui_cells_form weui_cells_div">
+			<div class="weui_cell">
+				<div class="weui_cell_bd weui_cell_primary">
+					<textarea id="textarea" class="weui_textarea" placeholder="请输入内容" rows="3"></textarea>
+					<div class="weui_textarea_counter"></div>
+				</div>
+			</div>
+		</div>
+		<div class="weui_cells weui_cells_form">
+			<div class="weui_cell">
+				<div class="weui_cell_hd"><span class="icon icon-84 icon-interval f-blue"></span></div>
+				<div class="weui_cell_bd weui_cell_primary">
+					<input class="weui_input" placeholder="请输入真实姓名" id="truename">
+				</div>
+			</div>
+
+			<div class="weui_cell">
+				<div class="weui_cell_hd"><span class="icon icon-13 icon-interval f-black"></span></div>
+				<div class="weui_cell_bd weui_cell_primary">
+				<input class="weui_input" placeholder="请输入QQ号码" id="qqnumber">
+				</div>
+			</div>
+		</div>
+		<div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <div class="weui_uploader">
+                        <div class="weui_uploader_hd weui_cell">
+                            <div class="weui_cell_bd weui_cell_primary">图片上传</div>
+                        </div>
+                        <div class="weui_uploader_bd">
+                            <ul class="weui_uploader_files" id='simg1'>
+                            </ul>
+                            <div class="weui_uploader_input_wrp upload"  id="img1">
+                            </div>
+                            <ul class="weui_uploader_files" id='simg2'>
+                            </ul>
+                            <div class="weui_uploader_input_wrp upload"  id="img2">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+		<div class="page-bd-15">
+			<a  class="weui_btn weui_btn_primary ajax-post">提交</a>
+		</div>
+		</form>
+		<!--底部导航栏-->
+		<div class="bottom_interval"></div>
+	</body>
+</html>

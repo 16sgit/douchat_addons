@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/weuix.min.css">
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/header_common.css" />
+		<link rel="stylesheet" href="{$_G['addon_url']}/Public/css/Ls_New.css" />
+		<script src="{$_G['addon_url']}/Public/js/zepto.min.js"></script>
+	</head>
+
+	<body>
+		<!--导航栏-->
+		<div class="weui_btn_default weui-header">
+			<div class="weui-header-left">
+				<a href="javascript: window.history.go(-1);" class="icon icon-109 f-blue"></a>
+			</div>
+			<h1 class="weui-header-title f-black"></h1>
+		</div>
+		<!--什么-->
+
+		<body ontouchstart="" class="page-bg">
+			<div class="page-bd-15">
+				<ul class="weui-comment">
+					<li class="weui-comment-item">
+						<div class="weui-comment-li"> <span class="check checked"><span class="weui-comment-num">￥{$data['reply_price']}</span> </span>
+						</div>
+						<div class="userinfo"> <strong class="nickname">{:get_fans_nickname(get_openid())}</strong> <img class="avatar" src="{:get_fans_info(get_openid(),'headimgurl')}"> </div>
+						<p class="font_style">{$data['reply_content']}</p>
+						<p class="time">{:date('Y-m-d H:i:s',$data['reply_time'])} </p>
+					</li>
+				</ul>
+
+			</div>
+
+		</body>
+	</body>
+
+</html>

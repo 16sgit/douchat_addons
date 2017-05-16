@@ -1,0 +1,16 @@
+body{
+				background: #f8f8f8;
+			}
+			.weui-form-preview-interval{
+				margin-top: 5px;	
+			}
+			.report{
+				color:black;
+				font-size: 18px;
+				margin-top: 10px;
+				line-height: 20px;
+				text-align: center;
+			}
+			.weui-form-preview-value_1{
+				font-size:1.2em !important;
+			}
